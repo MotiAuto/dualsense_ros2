@@ -3,6 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32.hpp>
+#include <geometry_msgs/msg/twist.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <chrono>
 
@@ -15,21 +16,11 @@ namespace dualsense_ros2
     {
         public:
         DualSenseROS2(const rclcpp::NodeOptions & node_options=rclcpp::NodeOptions());
-        void timer_callback(const sensor_msgs::msg::Joy::SharedPtr msg);
+        void topic_callback(const sensor_msgs::msg::Joy::SharedPtr msg);
         
         private:
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr linear_x_publisher_;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr linear_y_publisher_;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr angular_z_publisher_;
+        rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_publisher_;
         rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_1;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_2;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_3;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_4;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_5;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_6;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_7;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_8;
-        rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_9;
 
         rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber_;
     };

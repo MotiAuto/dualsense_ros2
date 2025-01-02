@@ -4,11 +4,14 @@ namespace dualsense_ros2
 {
     DualSenseROS2::DualSenseROS2(const rclcpp::NodeOptions & node_options) : rclcpp::Node("DualSenseROS2", node_options)
     {
-        twist_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/dualsense/twist", 0);
+        twist_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/dualsense/twist", rclcpp::SystemDefaultsQoS());
 
-        f_publisher_1 = this->create_publisher<std_msgs::msg::Float32>("/dualsense/f", 0);
+        f_publisher_1 = this->create_publisher<std_msgs::msg::Float32>("/dualsense/f", rclcpp::SystemDefaultsQoS());
 
-        joy_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy", 0, std::bind(&DualSenseROS2::topic_callback, this, _1));
+        joy_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy", rclcpp::SystemDefaultsQoS(), std::bind(&DualSenseROS2::topic_callback, this, _1));
+
+        this->declare_parameter("max_pow", 1.0);
+        this->get_parameter("max_pow", max_pow_);
 
         RCLCPP_INFO(this->get_logger(), "DualSenseROS2 intialize OK!!");
     }
@@ -19,9 +22,9 @@ namespace dualsense_ros2
         auto y_msg = std_msgs::msg::Float32();
         auto rotation_msg = std_msgs::msg::Float32();
         auto cmd = geometry_msgs::msg::Twist();
-        cmd.linear.x = -1.0* msg->axes[0];
-        cmd.linear.y = msg->axes[1];
-        cmd.angular.z = -1.0* msg->axes[3];
+        cmd.linear.x = -max_pow_* msg->axes[0];
+        cmd.linear.y = max_pow_ * msg->axes[1];
+        cmd.angular.z = -max_pow_* msg->axes[3];
 
         auto f1_msg = std_msgs::msg::Float32();
 

@@ -23,6 +23,8 @@ namespace dualsense_ros2
         rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr f_publisher_1;
 
         rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber_;
+
+        float max_pow_;
     };
 }
 
